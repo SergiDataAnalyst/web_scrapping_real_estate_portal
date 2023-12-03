@@ -1,7 +1,6 @@
 import requests
 from reportlab.pdfgen import canvas
 
-# Replace 'url_to_json_file' with the actual URL of the .json file you want to extract data from
 url_to_json_file = 'https://www.idealista.com/maps/api/v1/barcelona-barcelona/calle-federico-garcia-lorca/38'
 
 headers = {
@@ -17,11 +16,8 @@ response = requests.get(url_to_json_file, headers=headers2)
 
 # Check if the request was successful (status code 200)
 if response.status_code == 200:
-    # Parse the JSON data
     json_data = response.json()
 
-    # Now you can work with the extracted data
-    # For example, print the entire JSON data
     parcels = json_data.get('parcels', [])
     if not isinstance(parcels, list):
         raise ValueError("The 'parcels' field is not a list in the response.")
@@ -31,7 +27,6 @@ if response.status_code == 200:
     street = parts[7]
     house_number = parts[8]
 
-    # Format the stripped string
     formatted_string = f'{city}_{street.replace("-", "_")}_{house_number}'
 
     pdf_filename = 'propiedades_calle_garcia_lorca_38_Barcelona.pdf'
@@ -41,8 +36,8 @@ if response.status_code == 200:
 
     for parcel in parcels:
         for property_info in parcel.get('properties', []):
-            if y_coordinate < 50:
-                # Start a new page if there is not enough space
+            if y_coordinate < 50:  # Start a new page if there is not enough space
+
                 c.showPage()
                 y_coordinate = 750
 
@@ -61,7 +56,7 @@ if response.status_code == 200:
             bathroom_number = property_info.get('bathroom_number', '')
             coefficient = property_info.get('coefficient', '')
 
-            # Process the extracted information as needed (e.g., print or store it)
+            # Writing all the info for each parcel on the PDF file
             c.drawString(100, y_coordinate, f"ID de Propiedad: {property_id}")
             c.drawString(100, y_coordinate - 15, f"Nombre de Propiedad: {property_name}")
             c.drawString(100, y_coordinate - 30, f"Área de Propiedad: {property_area}")
@@ -81,7 +76,10 @@ if response.status_code == 200:
 
     c.save()
 
+elif response.status_code == 403:
+    print(f"Correct request but unwilling to send response, possibly too many requests: {response.status_code}")
+
+
 else:
-    # If the request was not successful, print an error message
     print(f"Error: Unable to retrieve data. Status code: {response.status_code}")
 
