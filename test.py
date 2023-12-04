@@ -9,7 +9,7 @@ with open(json_file, 'r') as file:
 
 parcels = data.get('parcels', [])
 if not isinstance(parcels, list):
-    raise ValueError("The 'parcels' field is not a list in the response.")
+    raise ValueError(" The 'parcels' field is not a list in the response.")
 
 pdf_filename = 'propiedades_calle_garcia_lorca_38_Barcelona.pdf'
 c = canvas.Canvas(pdf_filename)
