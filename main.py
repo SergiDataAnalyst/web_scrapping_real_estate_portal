@@ -3,8 +3,10 @@ from reportlab.pdfgen import canvas
 
 url_to_json_file = 'https://www.idealista.com/maps/api/v1/barcelona-barcelona/calle-federico-garcia-lorca/38'
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+#  build rotating User Agents
+#  build rotating proxies
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+                         '(KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
 headers2 = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0',
