@@ -3,22 +3,15 @@ import streamlit as st
 from reportlab.pdfgen import canvas
 
 
-def extract_price(json_file):
-
-
-
-
-
-
-street_input = st.text_input('Introduce el nombre de la calle')
+street_input = st.text_input('Introduce el nombre de la calle', placeholder='Ej: Jose Sangenis')
 street = str(street_input.replace(" ", "-"))
 print(street)
 
-number_input = str(st.text_input('Introduce el número: '))
+number_input = str(st.text_input("Introduce el número de la calle", placeholder='Ej: 49'))
 
 search_button = st.button("Buscar info")
 if search_button:
-    url_to_json_file = 'https://www.idealista.com/maps/api/v1/barcelona-barcelona/calle-' + street + '/' + number_input
+    url_to_json_file = f'https://www.idealista.com/maps/api/v1/barcelona-barcelona/calle-{street}/{number_input}'
     print(url_to_json_file)
     #  build rotating User Agents
     #  build rotating proxies
@@ -98,6 +91,15 @@ if search_button:
 
     elif response.status_code == 403:
         print(f"Correct request but unwilling to send response, possibly too many requests: {response.status_code}")
+
+    elif response.status_code == 404:
+        st.write(f"Please, double check the street name is written correctly or that the street number "
+                 f"exists. ")
+
+        st.markdown(f"[LINK](https://www.idealista.com/maps/barcelona-barcelona/calle-{street})")
+
+        # https://www.idealista.com/maps/provincia-municipio/calle-josep-sangenis/
+        # el municipio en cataluña esta con el nombre en catalán, en el país vasco parece que está en español
 
     else:
         print(f"Error: Unable to retrieve data. Status code: {response.status_code}")
