@@ -1,11 +1,15 @@
 import requests
 import streamlit as st
 from reportlab.pdfgen import canvas
+import time
 
 
 street_input = st.text_input('Introduce el nombre de la calle', placeholder='Ej: Jose Sangenis')
 street = str(street_input.replace(" ", "-"))
 print(street)
+proxies = {
+   'http': 'https://45.155.68.129:8133:fsobomgl:nisbsgb4ss3x'
+}
 
 number_input = str(st.text_input("Introduce el número de la calle", placeholder='Ej: 49'))
 
@@ -16,15 +20,16 @@ if search_button:
     #  build rotating User Agents
     #  build rotating proxies
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+                             'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0'
                              '(KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
     headers2 = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Referer': 'https://www.idealista.com/maps/barcelona-barcelona/calle-' + street + '/' + number_input + '/',
+        'Referer': f'https://www.idealista.com/maps/barcelona-barcelona/calle-{street}/{number_input}',
     }
-    response = requests.get(url_to_json_file, headers=headers2)
+    response = requests.get(url_to_json_file, headers=headers2, proxies=proxies)
 
     # Check if the request was successful (status code 200)
     if response.status_code == 200:
