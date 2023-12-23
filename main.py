@@ -1,7 +1,6 @@
 import requests
 import streamlit as st
 from reportlab.pdfgen import canvas
-import time
 
 
 street_input = st.text_input('Introduce el nombre de la calle', placeholder='Ej: Jose Sangenis')
