@@ -1,4 +1,5 @@
 import requests
+from bs4 import BeautifulSoup
 
 
 url_to_json_file = 'https://www.idealista.com/maps/api/v1/cadastre/080190485204DF3808E0007WG/valuation'
@@ -24,3 +25,4 @@ if response.status_code == 200:
 
 else:
     print(f"Error: Unable to retrieve data. Status code: {response.status_code}")
+
