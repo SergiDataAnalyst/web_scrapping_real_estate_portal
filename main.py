@@ -2,7 +2,7 @@ import requests
 import streamlit as st
 from reportlab.pdfgen import canvas
 
-
+## APP to search Idealista properties
 street_input = st.text_input('Introduce el nombre de la calle', placeholder='Ej: Jose Sangenis')
 street = str(street_input.replace(" ", "-"))
 print(street)
