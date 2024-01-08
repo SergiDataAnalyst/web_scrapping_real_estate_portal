@@ -1,7 +1,10 @@
 from playwright.sync_api import Playwright, TimeoutError
 from bs4 import BeautifulSoup
 from datetime import datetime
+import re
 
+
+# I HAVE BEEN BLOCKED 7/1/2024. Add a delay...
 
 def extract_cat_code(playwright: Playwright, catastral_code_list):
     browser = playwright.chromium.launch(headless=False)
@@ -14,8 +17,14 @@ def extract_cat_code(playwright: Playwright, catastral_code_list):
     page.fill("[placeholder=\"AAA0000000\\/E00000000\"]", "CCF194291") # change to a manual input, from XLSX file or system secret keys
     with page.expect_navigation():
         page.click("button:has-text(\"Validar DNI / Soporte\")")
+
+        pattern = re.compile(r"^\d{10,12}[A-Z]{2}$")
         value_list = []
         for catastral_code in catastral_code_list:
+            if not pattern.match(catastral_code):
+                print(f"Invalid catastral code: {catastral_code}. Skipping.")
+                value_list.append("Error")
+                continue
             try:
 
                 page.goto("https://www.sedecatastro.gob.es/CYCBienInmueble/OVCBusqueda.aspx?VR=SI&ejercicio=2024&Titu=43554142P")

@@ -1,36 +1,30 @@
 from sede_catastro import extract_cat_code
 from playwright.sync_api import sync_playwright
+import pandas as pd
 
-## note, convert to main,
 
-catastral_code_list = [
-    "9166306CG7096N0003RS",
-    "8494409CF8989S0001XG",
-    "8494012CF8989S0001YG",
-    "5172018CF8957S0001AG",
-    "0840034DF0904S0001EX",
-    "2864019DF0926S0001GK",
-    "6871011CG8067S0001GS",
-    "8215001CF9981N0001BZ",
-    "3733227CG8033S0033WQ",
-    "4139025CG8043N0014IU",
-    "6629204CG8062N0001YA",
-    "6436401CG8063N0111PG",
-    "7037119CG8073N0014XL",
-    "6734110CG8063S0004AH",
-    "6436401CG8063N0070WU",
-    "5042410CG9254S0001LW",
-    "3299008DG0139G0006QT",
-    "3405303DG0230A0004YI",
-    "1701003DG0210A0004HM",
-    "2701204DG0220A0005QT",
-    "2499401DG0129G0009BR",
-    "2602007DG0220A0004OR",
-    "3608086DG0230A0003JU",
-    "1701003DG0210A0008BR",
-]
+# note, convert to main,
+
+file_path = 'muestra_csv.csv'
+df = pd.read_csv(file_path)
+if 'REFERENCIA CATASTRAL' in df.columns:
+    # Extract elements from the 'REFERENCIA CATASTRAL' column and convert to a list
+    catastral_code_list = df['REFERENCIA CATASTRAL'].tolist()
+else:
+    catastral_code_list = []
+    print("Column 'REFERENCIA CATASTRAL' not found in the CSV file.")
+
+print(df.head(10))
 
 
 if __name__ == "__main__":
     with sync_playwright() as playwright:
         extract_cat_code(playwright, catastral_code_list)
+
+    if len(catastral_code_list) == len(df):
+
+        df['valor ref. catastral'] = catastral_code_list
+    else:
+        print("The length of referencia_catastral_list does not match the number of rows in the DataFrame.")
+
+    df.to_csv('nuevo_csv.csv', index=False)
